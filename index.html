@@ -1,0 +1,165 @@
+<!doctype html>
+
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+  <title>lumenObf — Text Obfuscator</title>
+  <style>
+    :root{
+      --bg-1: #0f1724;
+      --accent-1: #7b61ff;
+      --accent-2: #38f3ff;
+      --card: rgba(255,255,255,0.04);
+      --glass: rgba(255,255,255,0.06);
+      --text: #e6f0ff;
+      --muted: rgba(230,240,255,0.6);
+      --radius: 14px;
+    }html,body{height:100%;margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial;}
+body{
+  background: radial-gradient(1200px 600px at 10% 20%, rgba(123,97,255,0.18), transparent 8%),
+              radial-gradient(800px 400px at 85% 80%, rgba(56,243,255,0.12), transparent 6%),
+              linear-gradient(135deg,var(--bg-1) 0%, #071226 35%, #031019 100%);
+  color:var(--text);
+  display:flex;align-items:center;justify-content:center;padding:20px;
+}
+
+.app{
+  width:100%;max-width:1100px;display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:start;
+}
+
+.brand{display:flex;align-items:center;gap:16px;margin-bottom:14px;}
+.logo{width:72px;height:72px;border-radius:16px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--accent-1),var(--accent-2));box-shadow:0 8px 30px rgba(59,40,120,0.45), inset 0 -6px 18px rgba(255,255,255,0.06);position:relative;overflow:hidden;}
+.logo h1{font-size:20px;margin:0;font-weight:700;color:#fff;text-shadow:0 6px 18px rgba(123,97,255,0.32);}
+
+.title{text-shadow:0 6px 28px rgba(59,40,120,0.45),0 0 24px rgba(56,243,255,0.08);}
+.title h2{margin:0;font-size:26px;letter-spacing:0.6px}
+.title p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+
+.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--radius);padding:18px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 6px 30px rgba(2,8,23,0.6);}
+
+textarea{width:100%;min-height:200px;background:transparent;border-radius:10px;border:1px solid rgba(255,255,255,0.04);padding:14px;color:var(--text);font-size:15px;resize:vertical;outline:none}
+
+label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px}
+
+.controls{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.select,.input,.btn{background:var(--card);border:1px solid rgba(255,255,255,0.04);padding:8px 10px;border-radius:10px;color:var(--text);font-size:14px}
+.btn{cursor:pointer;box-shadow:0 8px 24px rgba(59,40,120,0.25);transition:transform .15s ease, box-shadow .15s ease}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:linear-gradient(90deg,var(--accent-1),var(--accent-2));color:#02101a;font-weight:700}
+
+.right-column{display:flex;flex-direction:column;gap:16px}
+
+.output{min-height:220px;white-space:pre-wrap;word-wrap:break-word;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent)}
+
+.small{font-size:13px;color:var(--muted)}
+h3.glow{font-size:18px;margin:0 0 8px 0;text-shadow:0 6px 30px rgba(123,97,255,0.28),0 0 20px rgba(56,243,255,0.06);} 
+
+@media (max-width:980px){
+  .app{grid-template-columns:1fr;}
+  .logo{width:56px;height:56px}
+  .brand{gap:10px}
+}
+@media (max-width:600px){
+  body{padding:10px;}
+  .controls{flex-direction:column;align-items:stretch}
+  .app{gap:16px}
+  .output{min-height:160px}
+}
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div>
+      <div class="brand">
+        <div class="logo"><h1>L</h1></div>
+        <div class="title"><h2 class="title-text">lumenObf</h2><p>Light-based text obfuscator</p></div>
+      </div><div class="card">
+    <h3 class="glow">Input</h3>
+    <textarea id="inputText" placeholder="Type or paste text here...">Hello, lumenObf!</textarea>
+    <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;">
+      <div style="flex:1;min-width:160px;">
+        <label class="small">Cipher</label>
+        <select id="cipherSelect" class="select">
+          <option value="caesar">Caesar</option>
+          <option value="rot13">ROT13</option>
+          <option value="base64">Base64</option>
+          <option value="vigenere">Vigenère</option>
+          <option value="xor">XOR</option>
+          <option value="binary">Binary</option>
+          <option value="ascii">ASCII Codes</option>
+        </select>
+      </div>
+      <div style="flex:1;min-width:140px;">
+        <label class="small">Key / Params</label>
+        <input id="keyInput" class="input" placeholder="Depends on cipher" />
+      </div>
+      <div style="align-self:end;display:flex;gap:8px;">
+        <button id="encodeBtn" class="btn btn-primary">Encode</button>
+        <button id="decodeBtn" class="btn">Decode</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="right-column">
+  <div class="card">
+    <h3 class="glow">Output</h3>
+    <div id="output" class="output">(result will appear here)</div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+      <button id="copyBtn" class="btn">Copy</button>
+      <button id="downloadBtn" class="btn">Download .txt</button>
+    </div>
+  </div>
+</div>
+
+  </div>  <script>
+    const el = id => document.getElementById(id);
+
+    function caesarEncode(str, shift){shift=((shift%26)+26)%26;return str.replace(/[a-zA-Z]/g,c=>{const b=c<='Z'?65:97;return String.fromCharCode((c.charCodeAt(0)-b+shift)%26+b);});}
+    function caesarDecode(str,shift){return caesarEncode(str,-shift);}
+    function rot13(str){return caesarEncode(str,13);}
+    function base64Encode(str){try{return btoa(unescape(encodeURIComponent(str)));}catch(e){return 'Encoding error';}}
+    function base64Decode(str){try{return decodeURIComponent(escape(atob(str)));}catch(e){return 'Decoding error';}}
+
+    function vigenereEncrypt(plain,key){if(!key)return 'Key required';key=key.replace(/[^A-Za-z]/g,'');if(!key)return 'Invalid key';let j=0;return plain.split('').map(ch=>{if(/[A-Za-z]/.test(ch)){const b=ch<='Z'?65:97;const k=(key[j%key.length].toUpperCase().charCodeAt(0)-65);j++;return String.fromCharCode((ch.charCodeAt(0)-b+k)%26+b);}return ch;}).join('');}
+    function vigenereDecrypt(cipher,key){if(!key)return 'Key required';key=key.replace(/[^A-Za-z]/g,'');if(!key)return 'Invalid key';let j=0;return cipher.split('').map(ch=>{if(/[A-Za-z]/.test(ch)){const b=ch<='Z'?65:97;const k=(key[j%key.length].toUpperCase().charCodeAt(0)-65);j++;return String.fromCharCode((ch.charCodeAt(0)-b-k+260)%26+b);}return ch;}).join('');}
+
+    function xorBytes(str,key){const enc=new TextEncoder();const data=enc.encode(str);let kb;if(/^-?\d+$/.test(key)){kb=new Uint8Array([Number(key)&255]);}else{kb=enc.encode(key||'0');}const out=new Uint8Array(data.length);for(let i=0;i<data.length;i++)out[i]=data[i]^kb[i%kb.length];return btoa(String.fromCharCode(...out));}
+    function xorBytesDecode(b64,key){try{const bin=atob(b64);const data=new Uint8Array([...bin].map(c=>c.charCodeAt(0)));let kb;const enc=new TextEncoder(),dec=new TextDecoder();if(/^-?\d+$/.test(key)){kb=new Uint8Array([Number(key)&255]);}else{kb=enc.encode(key||'0');}const out=new Uint8Array(data.length);for(let i=0;i<data.length;i++)out[i]=data[i]^kb[i%kb.length];return dec.decode(out);}catch(e){return 'Decoding error';}}
+
+    function binaryEncode(str){return str.split('').map(ch=>ch.charCodeAt(0).toString(2).padStart(8,'0')).join(' ');} 
+    function binaryDecode(bin){return bin.split(/\s+/).map(b=>String.fromCharCode(parseInt(b,2)||0)).join('');}
+
+    function asciiEncode(str){return str.split('').map(ch=>ch.charCodeAt(0)).join(' ');} 
+    function asciiDecode(nums){return nums.split(/\s+/).map(n=>String.fromCharCode(parseInt(n)||0)).join('');}
+
+    const inputEl=el('inputText'),outEl=el('output'),cipherEl=el('cipherSelect'),keyEl=el('keyInput');
+
+    function applyEncode(){const c=cipherEl.value,txt=inputEl.value,key=keyEl.value;let r='';switch(c){
+      case 'caesar':r=caesarEncode(txt,parseInt(key)||0);break;
+      case 'rot13':r=rot13(txt);break;
+      case 'base64':r=base64Encode(txt);break;
+      case 'vigenere':r=vigenereEncrypt(txt,key);break;
+      case 'xor':r=xorBytes(txt,key);break;
+      case 'binary':r=binaryEncode(txt);break;
+      case 'ascii':r=asciiEncode(txt);break;
+    }outEl.textContent=r;}
+
+    function applyDecode(){const c=cipherEl.value,txt=inputEl.value,key=keyEl.value;let r='';switch(c){
+      case 'caesar':r=caesarDecode(txt,parseInt(key)||0);break;
+      case 'rot13':r=rot13(txt);break;
+      case 'base64':r=base64Decode(txt);break;
+      case 'vigenere':r=vigenereDecrypt(txt,key);break;
+      case 'xor':r=xorBytesDecode(txt,key);break;
+      case 'binary':r=binaryDecode(txt);break;
+      case 'ascii':r=asciiDecode(txt);break;
+    }outEl.textContent=r;}
+
+    el('encodeBtn').onclick=applyEncode;el('decodeBtn').onclick=applyDecode;
+    el('copyBtn').onclick=()=>navigator.clipboard.writeText(outEl.textContent);
+    el('downloadBtn').onclick=()=>{const blob=new Blob([outEl.textContent],{type:'text/plain'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='lumenObf.txt';a.click();URL.revokeObjectURL(url);};
+  </script></body>
+</html>
